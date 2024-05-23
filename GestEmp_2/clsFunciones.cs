@@ -49,7 +49,7 @@ namespace GestEmp_2.clsFunciones
 			catch (Exception e)
 			{
 				//classLog.Log.AddLog("Error al ejecutar la sentencia " + frase + " (" + e.Message + ").", TipoLog.tpError);
-				throw e;
+				return null;
 			}
 
 			return dtResult;

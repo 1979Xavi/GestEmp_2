@@ -68,8 +68,13 @@ namespace GestEmp_2.Mantenimientos
 				comportamientoBotones();
 				dtgvDatos.DataSource = BaseDeDatos.ExecuteSelect(true, "Select idEmpresa, RazonSocial from MantEmpresas Where Activo = 1");
 				dtgvDatos.Columns[0].Visible = false;
-				dtgvDatos.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-				MuestraDetalle(dtgvDatos.Rows[0].Cells[0].Value.ToString());
+				
+				if (dtgvDatos.Rows.Count > 0 )
+				{
+					dtgvDatos.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+					MuestraDetalle(dtgvDatos.Rows[0].Cells[0].Value.ToString());
+				}
+				
 			}
 			catch (Exception ex)
 			{
@@ -138,13 +143,30 @@ namespace GestEmp_2.Mantenimientos
 				frmSelector frm1 = new frmSelector();
 				frm1.TopMost = true;
 				frm1.Owner = this;
+				frm1.tamanyo = 3;
+				frm1.OcultarColumnes[0] = 0;
+				frm1.OcultarColumnes[1] = 3;
+				frm1.OcultarColumnes[2] = 6;
+				
+
 				frm1.Titulo = "Selector de Paises";
-				frm1.strSql = "Select idPoblacion, codigoPoblacion, Descripcion from MantPoblaciones";
+				frm1.strSql = "Select po.idPoblacion, po.CodigoPoblacion, po.Descripcion as Poblacion, pr.idProvincia, pr.CodigoProvincia, pr.Descripcion as Provincia, pa.idPais, pa.CodigoPais, pa.Descripcion as Pais  " +
+					"from MantPoblaciones po Inner Join MantProvincias pr on po.idProvincia = pr.idProvincia " + 
+					"Inner join MantPaises pa on po.idPais = pa.idPais";
 				frm1.ShowDialog();
 
-				tCodPoblacion.Tag = frm1.id;
-				tCodPoblacion.Text = frm1.codigo;
-				tDescPoblacion.Text = frm1.nombre;
+
+				tCodPoblacion.Tag = frm1.dtDatos.Rows[0]["idPoblacion"].ToString();
+				tCodPoblacion.Text = frm1.dtDatos.Rows[0]["CodigoPoblacion"].ToString();
+				tDescPoblacion.Text = frm1.dtDatos.Rows[0]["Poblacion"].ToString();
+
+				tCodProvincia.Tag = frm1.dtDatos.Rows[0]["idProvincia"].ToString();
+				tCodProvincia.Text = frm1.dtDatos.Rows[0]["codigoProvincia"].ToString();
+				tDescProvincia.Text = frm1.dtDatos.Rows[0]["Provincia"].ToString();
+
+				tCodPais.Tag = frm1.dtDatos.Rows[0]["idPais"].ToString();
+				tCodPais.Text = frm1.dtDatos.Rows[0]["codigoPais"].ToString();
+				tDescPais.Text = frm1.dtDatos.Rows[0]["Pais"].ToString();
 			}
 			catch (Exception ex)
 			{
@@ -153,49 +175,6 @@ namespace GestEmp_2.Mantenimientos
 			}
 		}
 
-		private void bBuscaProvincia_Click(object sender, EventArgs e)
-		{
-			try
-			{
-				frmSelector frm1 = new frmSelector();
-				frm1.TopMost = true;
-				frm1.Owner = this;
-				frm1.Titulo = "Selector de Paises";
-				frm1.strSql = "Select idProvincia, codigoProvincia, Descripcion from MantPaises";
-				frm1.ShowDialog();
-
-				tCodPais.Tag = frm1.id;
-				tCodPais.Text = frm1.codigo;
-				tDescPais.Text = frm1.nombre;
-			}
-			catch (Exception ex)
-			{
-				clsfuncionesGenerales obj = new clsfuncionesGenerales();
-				obj.creoPopup("Se ha producido el siguiente error: " + ex.Message, "Error", 1);
-			}
-		}
-
-		private void bBuscarPais_Click(object sender, EventArgs e)
-		{
-			try
-			{
-				frmSelector frm1 = new frmSelector();
-				frm1.TopMost = true;
-				frm1.Owner = this;
-				frm1.Titulo = "Selector de Paises";
-				frm1.strSql = "Select idPais, codigoPais, Descripcion from MantPaises";
-				frm1.ShowDialog();
-
-				tCodPais.Tag = frm1.id;
-				tCodPais.Text = frm1.codigo;
-				tDescPais.Text = frm1.nombre;
-			}
-			catch (Exception ex)
-			{
-				clsfuncionesGenerales obj = new clsfuncionesGenerales();
-				obj.creoPopup("Se ha producido el siguiente error: " + ex.Message, "Error", 1);
-			}
-		}
 
 		private void bBuscarImagen_Click(object sender, EventArgs e)
 		{
@@ -275,52 +254,44 @@ namespace GestEmp_2.Mantenimientos
 					string strLineas = "";
 					string strDoc = "";
 					int linea = 0;
+
 					try
 					{
 						if (accion == "N")
-						//Es nou fem un insert
-						{
-							guid = Guid.NewGuid().ToString();
-							SqlTransaction transacCab = connection.BeginTransaction();
-							strCabecera = "INSERT INTO MantEmpresas (idEmpresa, RazonSocial, NIF, Domicilio, CodigoPostal, idPoblacion, idProvincia, idPais, Activo, UsuarioCreacion, FechaHoraCreacion)" +
-								" VALUES ('" + guid + "','" +
-								tDescripcion.Text + "', " +
-								tNifCif.Text + "', " +
-								tDirecccion.Text + "', " +
-								tCodigoPostal.Text +
-								tCodPoblacion.Tag + "', " +
-								tCodProvincia.Tag + "', " +
-								tCodPais.Tag + "',)" +
-								"1, 'SYSTEM','" +
-								DateTime.Now + "')";
+							//Es nou fem un insert
+							{
 
-						}
+								guid = Guid.NewGuid().ToString();
+								SqlTransaction transacCab = connection.BeginTransaction();
+								strCabecera = "INSERT INTO MantEmpresas (idEmpresa, RazonSocial, NIF, Domicilio, CodigoPostal, idPoblacion, idProvincia, idPais, Activo, UsuarioCreacion, FechaHoraCreacion)" +
+									" VALUES ('" + guid + "','" +
+									tDescripcion.Text + "', " +
+									tNifCif.Text + "', " +
+									tDirecccion.Text + "', " +
+									tCodigoPostal.Text +
+									tCodPoblacion.Tag + "', " +
+									tCodProvincia.Tag + "', " +
+									tCodPais.Tag + "',)" +
+									"1, 'SYSTEM','" +
+									DateTime.Now + "')";
+
+							}
+
 						else
 						//Es una modificacio, fem un Update
 						{
 							SqlTransaction transacCab = connection.BeginTransaction();
-							strCabecera = "UPDATE MantEmpresas SET RazonSocial = '" + tDescripcion.Text + "'" +
-							" NIF = '" + tNifCif.Text + "'" +
-							" Domicilio = '" + tDirecccion.Text + "'" +
-							" CodigoPostal = '" + tCodigoPostal.Text+ "'" +
-							" idPoblacion = '" + tCodPoblacion.Tag + "'" +
-							" idProvincia = '" + tCodProvincia.Tag + "'" +
-							" idPais = '" + tCodPais.Tag + "'" +
-							" UsuarioModificacion = 'SYSTEM' " +
-							" FechaHoraModificacion = '" + DateTime.Now.ToString() + "'" +
+							strCabecera = "UPDATE Presupuesto SET idCliente = @idCliente, " +
+							" idDireccionCliente = @idDireccionCliente, " +
+							" idIva = @idIva, " +
+							" FechahoraEmision = @FechaHoraEmision, " +
+							" FechaHoraValidez = @FechaHoraValidez, " +
+							" status = @status, " +
+							" UsuarioModificacion = @UsuarioModificacion, " +
+							" FechaHoraModificacion = @FechaHoraModificacion " +
 							" WHERE idPresupuesto = '" + guid + "'";
 
-							using (SqlCommand command1 = new SqlCommand(strCabecera, connection))
-							{
-								command1.Transaction = transacCab;
-								command1.ExecuteNonQuery();
-								transacCab.Commit();
-							}
 						}
-						BaseDeDatos.ExecuteSelect(true, strCabecera);
-						cargaDatos();
-						accionPantalla = "A";
-						comportamientoBotones();
 					}
 					catch (Exception ex)
 					{

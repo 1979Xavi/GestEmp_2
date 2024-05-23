@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 using RestSharp;
 
+=======
+>>>>>>> 7d6060174b091af6a35e034f0961d1c580a2100f
 namespace GestTPV
 {
 	public partial class Form1 : Form
@@ -7,6 +10,7 @@ namespace GestTPV
 		public Form1()
 		{
 			InitializeComponent();
+<<<<<<< HEAD
 			enviaWhatsAppAsync();
 		}
 
@@ -28,6 +32,8 @@ namespace GestTPV
 			RestResponse response = await client.ExecuteAsync(request);
 			var output = response.Content;
 			Console.WriteLine(output);
+=======
+>>>>>>> 7d6060174b091af6a35e034f0961d1c580a2100f
 		}
 	}
 }

@@ -174,6 +174,8 @@
 			this.splitContainer3.Panel1.Controls.Add(this.tCodPoblacion);
 			this.splitContainer3.Panel1.Controls.Add(this.tDirecccion);
 			this.splitContainer3.Panel1.Controls.Add(this.label7);
+			this.splitContainer3.Panel1.Controls.Add(this.tCodPoblacion);
+			this.splitContainer3.Panel1.Controls.Add(this.tDirecccion);
 			this.splitContainer3.Panel1.Controls.Add(this.label3);
 			this.splitContainer3.Panel1.Controls.Add(this.tNifCif);
 			this.splitContainer3.Panel1.Controls.Add(this.label4);
@@ -224,7 +226,6 @@
 			this.bBuscarPais.TabIndex = 48;
 			this.bBuscarPais.Text = "...";
 			this.bBuscarPais.UseVisualStyleBackColor = true;
-			this.bBuscarPais.Click += new System.EventHandler(this.bBuscarPais_Click);
 			// 
 			// tDescProvincia
 			// 
@@ -242,7 +243,6 @@
 			this.bBuscaProvincia.TabIndex = 48;
 			this.bBuscaProvincia.Text = "...";
 			this.bBuscaProvincia.UseVisualStyleBackColor = true;
-			this.bBuscaProvincia.Click += new System.EventHandler(this.bBuscaProvincia_Click);
 			// 
 			// tDescPoblacion
 			// 
@@ -315,6 +315,7 @@
 			this.tDirecccion.Location = new System.Drawing.Point(135, 175);
 			this.tDirecccion.Name = "tDirecccion";
 			this.tDirecccion.Size = new System.Drawing.Size(299, 20);
+			this.tDirecccion.Size = new System.Drawing.Size(396, 20);
 			this.tDirecccion.TabIndex = 2;
 			// 
 			// label3
@@ -543,7 +544,9 @@
 		private System.Windows.Forms.PictureBox pLogo;
 		private System.Windows.Forms.Button bBuscarImagen;
 		private System.Windows.Forms.OpenFileDialog opFile;
+
 		private System.Windows.Forms.TextBox tCodigoPostal;
 		private System.Windows.Forms.Label label7;
+
 	}
 }

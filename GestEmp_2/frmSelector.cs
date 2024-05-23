@@ -19,16 +19,30 @@ namespace GestEmp_2
 		public object id;
 		public string codigo;
 		public string nombre;
+		public int tamanyo;
+		public int[] OcultarColumnes = new int[100];
+
+		public DataTable dtDatos;
 
 		private void frmSelector_Load(object sender, EventArgs e)
 		{
-			DataTable dtDatos = new DataTable();
+			OcultarColumnes = new int[tamanyo];
+
 			this.Text = Titulo;
 			dtDatos = BaseDeDatos.ExecuteSelect(true, strSql);
 
 			dtgvDatos.DataSource = dtDatos;
 			dtgvDatos.Columns[0].Visible = false;
 			dtgvDatos.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+			if (OcultarColumnes.Length > 0)
+				{
+				for (int i = 0; i < OcultarColumnes.Length; i++)
+				{
+						dtgvDatos.Columns[i].Visible = false;
+				}
+			}
+
 		}
 
 		private void bAceptar_Click(object sender, EventArgs e)
